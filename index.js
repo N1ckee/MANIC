@@ -25,10 +25,10 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
       .then(data => {
         if (data.length > 0) {
           var lat = data[0].lat;
-          var lon = data[0].lon;
+          var lng = data[0].lon;
 
           document.getElementById("lat").innerText = "Latitud: \n" + lat;
-          document.getElementById("lng").innerText = "Longitud: \n" + lon; 
+          document.getElementById("lng").innerText = "Longitud: \n" + lng; 
 
           // Move map to result
           map.setView([lat, lng], 14);
@@ -93,7 +93,7 @@ function calculateTiltAngle(latitude, season = "average") {
     default:
       tilt = 0.76 * latitude + 3.1
   }
-  return Math.max(0,Math.min(tilt, 90)); // Clamp between 0 and 90 degrees
+  return Math.max(0, Math.abs(Math.min(tilt, 90))); // Clamp between 0 and 90 degrees
 }
 
 // Function that runs when the user clicks the "Calculate" button
@@ -107,7 +107,6 @@ function runCalculation() {
 
   const latitude = parseFloat(latMatch[0]);
   const season = document.getElementById("season").value;
-<<<<<<< HEAD
 
   const area = parseFloat(document.getElementById("panelArea").value);
   const efficiency = parseFloat(document.getElementById("panelEfficiency").value);
@@ -118,9 +117,6 @@ function runCalculation() {
   }
 
   const tilt = calculateTiltAngle(latitude, season);
-=======
-  const tilt = calculateTiltAngle(Math.abs(latitude), season);
->>>>>>> b4ddd3734b35b7acb08c3489b738b9a6eb8395f6
   const direction = getPanelDirection(latitude);
 
   document.getElementById("tilt-angle").innerText = `Recommended tilt angle for ${season}: ${tilt.toFixed(1)}°\nPanel should face: ${direction}`;
