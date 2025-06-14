@@ -15,8 +15,6 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
     }
     
 });
-
-
   var marker;
 
   function geocode() {
@@ -95,7 +93,7 @@ function calculateTiltAngle(latitude, season = "average") {
     default:
       tilt = 0.76 * latitude + 3.1
   }
-  return Math.max(0, Math.abs(Math.min(tilt, 90))); // Clamp between 0 and 90 degrees
+  return Math.max(0,Math.min(tilt, 90)); // Clamp between 0 and 90 degrees
 }
 
 // Function that runs when the user clicks the "Calculate" button
@@ -109,12 +107,25 @@ function runCalculation() {
 
   const latitude = parseFloat(latMatch[0]);
   const season = document.getElementById("season").value;
+<<<<<<< HEAD
+
+  const area = parseFloat(document.getElementById("panelArea").value);
+  const efficiency = parseFloat(document.getElementById("panelEfficiency").value);
+
+  if (isNaN(area) || isNaN(efficiency) || area <= 0 || efficiency <= 0) {
+    alert("Please enter valid panel area and efficiency.");
+    return;
+  }
+
   const tilt = calculateTiltAngle(latitude, season);
+=======
+  const tilt = calculateTiltAngle(Math.abs(latitude), season);
+>>>>>>> b4ddd3734b35b7acb08c3489b738b9a6eb8395f6
   const direction = getPanelDirection(latitude);
 
   document.getElementById("tilt-angle").innerText = `Recommended tilt angle for ${season}: ${tilt.toFixed(1)}°\nPanel should face: ${direction}`;
 
-  const outputData = simulateOutputByTilt(latitude);
+  const outputData = simulateOutputByTilt(latitude, area, efficiency);
   const labels = outputData.map(item => item.tilt);
   const data = outputData.map(item => item.output);
 
@@ -140,7 +151,7 @@ function runCalculation() {
       responsive: true,
       scales: {
         x: { title: { display: true, text: 'Tilt Angle (°)' } },
-        y: { title: { display: true, text: 'Output (kWh per kW)' } }
+        y: { title: { display: true, text: 'Annual Output (kWh/year)' } }
       }
     }
   });
@@ -152,13 +163,18 @@ function getPanelDirection(latitude) {
 }
 
 
-function simulateOutputByTilt(latitude) {
+function simulateOutputByTilt(latitude, area, efficiency) {
   const results = [];
+  const optimalTilt = 0.76 * latitude + 3.1;
+  const panelPowerKW = (area * efficiency) / 1000; // convert to kW
+  const averageSunHoursPerYear = latitude >= 0 ? 1100 : 900;
+
   for (let tilt = 0; tilt <= 90; tilt += 5) {
-    const optimalTilt = 0.76 * latitude + 3.1;
-    const efficiency = Math.cos((Math.PI / 180) * (tilt - optimalTilt)); // max at optimal
-    const output = Math.max(0, efficiency) * 1000; // base output in kWh
+    const efficiencyFactor = Math.cos((Math.PI / 180) * (tilt - optimalTilt));
+    const normalized = Math.max(0, efficiencyFactor);
+    const output = panelPowerKW * averageSunHoursPerYear * normalized;
     results.push({ tilt, output: output.toFixed(0) });
   }
+
   return results;
 }
