@@ -49,6 +49,31 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
   }
 
 
+// Dark/light Mode
+const lightTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors'
+});
+
+const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap contributors, © CartoDB'
+});
+
+lightTiles.addTo(map);
+
+const toggleButton = document.getElementById('toggle-theme');
+
+toggleButton.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+  
+  if (document.body.classList.contains('dark-mode')) {
+    map.removeLayer(lightTiles);
+    darkTiles.addTo(map);
+  } else {
+    map.removeLayer(darkTiles);
+    lightTiles.addTo(map);
+  }
+});
+
 // Press enter to search
 const inputaddress = document.getElementById("address");
 
