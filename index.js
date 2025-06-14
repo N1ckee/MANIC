@@ -159,7 +159,11 @@ function runCalculation() {
   const outputData = simulateOutputByTilt(latitude, area, efficiency);
   const labels = outputData.map(item => item.tilt);
   const data = outputData.map(item => item.output);
+  drawTiltchart(labels, data);
 
+};
+
+function drawTiltchart(labels, data) {
   const ctx = document.getElementById('tiltChart').getContext('2d');
 
   if (window.tiltChartInstance) {
