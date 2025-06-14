@@ -7,6 +7,9 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
     var lng = e.latlng.lng;
     document.getElementById("lat").innerText = "Latitud: " + lat;
     document.getElementById("lng").innerText = "Longitud:" + lng; 
+<<<<<<< HEAD
+});
+=======
   });
 
 // Function to calculate tilt angle based on latitude and season
@@ -50,3 +53,4 @@ function getPanelDirection(latitude) {
   return latitude >= 0 ? "South" : "North";
 }
 
+>>>>>>> 5b9ebf749594a90ff9cccbd7f53fd98a73262a9b

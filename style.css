@@ -3,7 +3,7 @@
     margin: 2px;
     padding: 10px;
     border: 2px solid black;
-    width: fit-content;
+    width: 350px;
     height: fit-content;
 }
 
@@ -16,4 +16,24 @@
 
 .container {
     display:  inline-flex;
+}
+
+.infobox {
+    display: flexbox;
+    margin: 2px;
+    padding: 10px;
+    border: 2px solid black;
+    width: 350px;
+    height: fit-content;
+}
+
+.infoselector {
+    display: inline-flex;
+    width: 350px;
+}
+
+.infotab {
+    border: 2px solid black;
+    width: 75px;
+    text-align: center;
 }
