@@ -28,7 +28,12 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
           var lng = data[0].lon;
 
           document.getElementById("lat").innerText = "Latitud: " + lat;
+<<<<<<< HEAD
           document.getElementById("lng").innerText = "Longitud:" + lng; 
+=======
+          document.getElementById("lng").innerText = "Longitud:" + lon; 
+
+>>>>>>> a43542a6faa9e55b0de50eb59e47bb41fb450aa3
           // Move map to result
           map.setView([lat, lng], 14);
 
@@ -101,5 +106,9 @@ function runCalculation() {
   const tilt = calculateTiltAngle(latitude, season);
   const direction = getPanelDirection(latitude);
 
-  document.getElementById("tilt-angle").innerText = `Recommended tilt angle for ${season}: ${tilt.toFixed(1)}°`;
+  document.getElementById("tilt-angle").innerText = `Recommended tilt angle for ${season}: ${tilt.toFixed(1)}°\nPanel should face: ${direction}`;
 };
+
+function getPanelDirection(latitude) {
+  return latitude >= 0 ? "South" : "North";
+}

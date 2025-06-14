@@ -16,8 +16,8 @@
           <h1>Solarcalculator</h1>
           <t>The application to calculate solar profibility</t>
           <br>
-          <input></input>
-          <button>Search</button>
+          <input type="text" id="address" placeholder="Enter an address" />
+          <button onclick="geocode()">Search</button>
           <button onclick="getLocation()">Current location</button>
           <br>
           <t id="lat">Latitud:</t>
@@ -39,8 +39,6 @@
       <div class="mapbox">
         <div id="map" style="height: 500px;"></div>
       </div>
-      <input type="text" id="address" placeholder="Enter an address" />
-      <button onclick="geocode()">Search</button>
     </body>
     <t id="lat"></t>
     <t id="lng"></t>
