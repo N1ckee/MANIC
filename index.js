@@ -10,10 +10,7 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
 });
 
 
-  var map = L.map('map').setView([0, 0], 2);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
+
 
   var marker;
 
@@ -31,13 +28,13 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
           document.getElementById("lng").innerText = "Longitud: \n" + lon; 
 
           // Move map to result
-          map.setView([lat, lon], 13);
+          map.setView([lat, lng], 14);
 
           // Place or move marker
           if (marker) {
-            marker.setLatLng([lat, lon]);
+            marker.setLatLng([lat, lng]);
           } else {
-            marker = L.marker([lat, lon]).addTo(map);
+            marker = L.marker([lat, lng]).addTo(map);
           }
         } else {
           alert("Address not found");
@@ -59,9 +56,17 @@ function getLocation() {
 }
 
 function success(position) {
+
   map.setView([position.coords.latitude,position.coords.longitude], 14)
   document.getElementById("lat").innerText = "Latitud: \n" + position.coords.latitude;
   document.getElementById("lng").innerText = "Longitud: \n" + position.coords.longitude; 
+  if (marker) {
+    marker.setLatLng([position.coords.latitude, position.coords.longitude]);
+  } 
+  else 
+  {
+    marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+  }
 }
 
 function error() {
@@ -83,9 +88,9 @@ function calculateTiltAngle(latitude, season = "average") {
     case "authumn":
       tilt = latitude;
     default:
-      tilt = latitude;
+      tilt = 0.76 * latitude + 3.1
   }
-  return Math.max(0, Math.min(tilt, 90)); // Clamp between 0 and 90 degrees
+  return Math.max(0, Math.abs(Math.min(tilt, 90))); // Clamp between 0 and 90 degrees
 }
 
 // Function that runs when the user clicks the "Calculate" button
@@ -103,8 +108,52 @@ function runCalculation() {
   const direction = getPanelDirection(latitude);
 
   document.getElementById("tilt-angle").innerText = `Recommended tilt angle for ${season}: ${tilt.toFixed(1)}°\nPanel should face: ${direction}`;
+
+  const outputData = simulateOutputByTilt(latitude);
+  const labels = outputData.map(item => item.tilt);
+  const data = outputData.map(item => item.output);
+
+  const ctx = document.getElementById('tiltChart').getContext('2d');
+
+  if (window.tiltChartInstance) {
+    window.tiltChartInstance.destroy(); // Reset previous chart
+  }
+
+  window.tiltChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Estimated Output (kWh)',
+        data: data,
+        borderColor: 'orange',
+        fill: false,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { title: { display: true, text: 'Tilt Angle (°)' } },
+        y: { title: { display: true, text: 'Output (kWh per kW)' } }
+      }
+    }
+  });
 };
+
 
 function getPanelDirection(latitude) {
   return latitude >= 0 ? "South" : "North";
+}
+
+
+function simulateOutputByTilt(latitude) {
+  const results = [];
+  for (let tilt = 0; tilt <= 90; tilt += 5) {
+    const optimalTilt = 0.76 * latitude + 3.1;
+    const efficiency = Math.cos((Math.PI / 180) * (tilt - optimalTilt)); // max at optimal
+    const output = Math.max(0, efficiency) * 1000; // base output in kWh
+    results.push({ tilt, output: output.toFixed(0) });
+  }
+  return results;
 }
