@@ -7,10 +7,26 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
     var lng = e.latlng.lng;
     document.getElementById("lat").innerText = "Latitud: " + lat;
     document.getElementById("lng").innerText = "Longitud:" + lng; 
-<<<<<<< HEAD
 });
-=======
-  });
+
+// Gets geodata from user and updates the map with it
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(success, error);
+  } else {
+   // x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function success(position) {
+  map.setView([position.coords.latitude,position.coords.longitude])
+  document.getElementById("lat").innerText = "Latitud: " + position.coords.latitude;
+  document.getElementById("lng").innerText = "Longitud:" + position.coords.longitude; 
+}
+
+function error() {
+  alert("Sorry, no position available.");
+}
 
 // Function to calculate tilt angle based on latitude and season
 function calculateTiltAngle(latitude, season = "average") {
@@ -46,6 +62,4 @@ function runCalculation() {
   const tilt = calculateTiltAngle(latitude, season);
 
   document.getElementById("tilt-angle").innerText = `Recommended tilt angle for ${season}: ${tilt.toFixed(1)}°`;
-}
-
->>>>>>> 5b9ebf749594a90ff9cccbd7f53fd98a73262a9b
+};
