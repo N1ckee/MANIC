@@ -10,10 +10,7 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
 });
 
 
-  var map = L.map('map').setView([0, 0], 2);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
+
 
   var marker;
 
@@ -58,9 +55,17 @@ function getLocation() {
 }
 
 function success(position) {
+
   map.setView([position.coords.latitude,position.coords.longitude], 14)
   document.getElementById("lat").innerText = "Latitud: " + position.coords.latitude;
   document.getElementById("lng").innerText = "Longitud:" + position.coords.longitude; 
+  if (marker) {
+    marker.setLatLng([position.coords.latitude, position.coords.longitude]);
+  } 
+  else 
+  {
+    marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+  }
 }
 
 function error() {
@@ -82,7 +87,7 @@ function calculateTiltAngle(latitude, season = "average") {
     case "authumn":
       tilt = latitude;
     default:
-      tilt = latitude;
+      tilt = 0.76 * latitude + 3.1
   }
   return Math.max(0, Math.abs(Math.min(tilt, 90))); // Clamp between 0 and 90 degrees
 }
