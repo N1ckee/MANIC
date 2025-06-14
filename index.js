@@ -7,6 +7,13 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
     var lng = e.latlng.lng;
     document.getElementById("lat").innerText = "Latitud: \n" + lat;
     document.getElementById("lng").innerText = "Longitud: \n" + lng; 
+
+    if (marker) {
+      marker.setLatLng([lat, lng]);
+    } else {
+      marker = L.marker([lat, lng]).addTo(map);
+    }
+    
 });
 
 
