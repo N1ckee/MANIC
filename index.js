@@ -5,8 +5,8 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
   map.on('click', function(e) {
     var lat = e.latlng.lat;
     var lng = e.latlng.lng;
-    document.getElementById("lat").innerText = "Latitud: " + lat;
-    document.getElementById("lng").innerText = "Longitud:" + lng; 
+    document.getElementById("lat").innerText = "Latitud: \n" + lat;
+    document.getElementById("lng").innerText = "Longitud: \n" + lng; 
 });
 
 
@@ -26,6 +26,9 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
         if (data.length > 0) {
           var lat = data[0].lat;
           var lon = data[0].lon;
+
+          document.getElementById("lat").innerText = "Latitud: \n" + lat;
+          document.getElementById("lng").innerText = "Longitud: \n" + lon; 
 
           // Move map to result
           map.setView([lat, lon], 13);
@@ -57,8 +60,8 @@ function getLocation() {
 
 function success(position) {
   map.setView([position.coords.latitude,position.coords.longitude], 14)
-  document.getElementById("lat").innerText = "Latitud: " + position.coords.latitude;
-  document.getElementById("lng").innerText = "Longitud:" + position.coords.longitude; 
+  document.getElementById("lat").innerText = "Latitud: \n" + position.coords.latitude;
+  document.getElementById("lng").innerText = "Longitud: \n" + position.coords.longitude; 
 }
 
 function error() {

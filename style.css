@@ -3,12 +3,13 @@
     margin: 2px;
     padding: 10px;
     border: 2px solid black;
-    width: 350px;
+    width: 400px;
     height: fit-content;
 }
 
 .mapbox {
     display: flexbox;
+    margin: 2px;
     border:  2px solid black;
     width: 500px;
     height: 500px;
@@ -23,7 +24,7 @@
     margin: 2px;
     padding: 10px;
     border: 2px solid black;
-    width: 350px;
+    width: 400px;
     height: fit-content;
 }
 
@@ -36,4 +37,14 @@
     border: 2px solid black;
     width: 75px;
     text-align: center;
+}
+
+.solarhead {
+    padding: 4px 10px;
+}
+
+.solarheadtext {
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic; 
+    line-height: 1px;
 }

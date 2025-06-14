@@ -10,39 +10,53 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   </head>
   <body>
+    <header class="solarhead">
+      <span>
+      <div style="width: 400px;">
+        <h1 class="solarheadtext">Solarcalculator</h1>
+        <h2 class="solarheadtext">------ ------ ------ ----- ---- --</h2>
+      </div>
+      </span>
+    </header>
     <div class="container">
       <div>
+        <!--Search and map functions -->
         <div class="calcbox">
-          <h1>Solarcalculator</h1>
           <t>The application to calculate solar profibility</t>
           <br>
-          <input></input>
-          <button>Search</button>
+          <input type="text" id="address" placeholder="Enter an address" />
+          <button onclick="geocode()">Search</button>
           <button onclick="getLocation()">Current location</button>
           <br>
-          <t id="lat">Latitud:</t>
-          <br>
-          <t id="lng">Longitud:</t>
+          <table style="width:100%">
+            <tr>
+            <td><t id="lat">Latitud: xxxxxxxxxxxxxx</t></td>
+            <td><t id="lng">Longitud: xxxxxxxxxxxxxx</t></td>
+            </tr>
+          </table>
         </div>
+        <!--Provides calculations based on where you are-->
         <div class="infobox">
-          <button onclick="runCalculation()">Calculate</button>
-          <select id="season">
+          <t>Optimal solarpanel angle</t>
+          <br>
+          <select id="season" style="width: 200px;">
             <option>All</option>
             <option>Spring</option>
             <option>Summer</option>
             <option>Fall</option>
             <option>Winter</option>
           </select>
-          <p id="tilt-angle"></p>
+          <button onclick="runCalculation()">Calculate</button>
+          <p id="tilt-angle">Recommended tilt angle<br>Panel should face</p>
         </div>
       </div>
+      <!--Map-->
       <div class="mapbox">
         <div id="map" style="height: 500px;"></div>
       </div>
-      <input type="text" id="address" placeholder="Enter an address" />
-      <button onclick="geocode()">Search</button>
-    </body>
-    <t id="lat"></t>
-    <t id="lng"></t>
+    </div>
+    <div style="width: auto; height: 500px; border: 2px solid black;">
+    </div>
     <script src="index.js"></script>
-    
+  </body>
+</html>
