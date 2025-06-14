@@ -88,12 +88,12 @@ function calculateTiltAngle(latitude, season = "average") {
       break;
     case "spring":
       tilt = latitude;
-    case "authumn":
+    case "fall":
       tilt = latitude;
     default:
       tilt = 0.76 * latitude + 3.1
   }
-  return Math.max(0, Math.abs(Math.min(tilt, 90))); // Clamp between 0 and 90 degrees
+  return Math.max(0, Math.min(tilt, 90)); // Clamp between 0 and 90 degrees
 }
 
 // Function that runs when the user clicks the "Calculate" button
@@ -116,7 +116,7 @@ function runCalculation() {
     return;
   }
 
-  const tilt = calculateTiltAngle(latitude, season);
+  const tilt = calculateTiltAngle(Math.abs(latitude), season);
   const direction = getPanelDirection(latitude);
 
   document.getElementById("tilt-angle").innerText = `Recommended tilt angle for ${season}: ${tilt.toFixed(1)}°\nPanel should face: ${direction}`;
