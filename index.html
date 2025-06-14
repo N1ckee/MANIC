@@ -6,18 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Solarcalculator</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   </head>
   <body>
-    <script src="index.js"></script>
     <div class="container">
-        <div class="calcbox">
-            <h1>Solarcalculator</h1>
-            <t>The application to calculate solar profibility</t>
-            <br>
-            <input></input>
-            <button>Calculate</button>
-        </div>
-        <div class="mapbox">
-        </div>
-  </body>
-</html>
+      <div class="calcbox">
+        <h1>Solarcalculator</h1>
+        <t>The application to calculate solar profibility</t>
+        <br>
+        <input></input>
+        <button>Calculate</button>
+        <br>
+        <t id="lat"></t>
+        <br>
+        <t id="lng"></t>
+      </div>
+      <div class="mapbox">
+        <div id="map" style="height: 500px;"></div>
+      </div>
+    </body>
+    <t id="lat"></t>
+    <t id="lng"></t>
+    <script src="index.js"></script>
+    </html>
