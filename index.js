@@ -4,4 +4,7 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
 
   map.on('click', function(e) {
     var lat = e.latlng.lat;
-    var lng = e.latlng.lng;});
+    var lng = e.latlng.lng;
+    document.getElementById("lat").innerText = "Latitud: " + lat;
+    document.getElementById("lng").innerText = "Longitud:" + lng; 
+});
