@@ -9,6 +9,43 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
     document.getElementById("lng").innerText = "Longitud:" + lng; 
 });
 
+
+  var map = L.map('map').setView([0, 0], 2);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  var marker;
+
+  function geocode() {
+    var address = document.getElementById('address').value;
+
+    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
+      .then(response => response.json())
+      .then(data => {
+        if (data.length > 0) {
+          var lat = data[0].lat;
+          var lon = data[0].lon;
+
+          // Move map to result
+          map.setView([lat, lon], 13);
+
+          // Place or move marker
+          if (marker) {
+            marker.setLatLng([lat, lon]);
+          } else {
+            marker = L.marker([lat, lon]).addTo(map);
+          }
+        } else {
+          alert("Address not found");
+        }
+      })
+      .catch(error => {
+        alert("Geocoding error: " + error);
+      });
+  }
+
+
 // Gets geodata from user and updates the map with it
 function getLocation() {
   if (navigator.geolocation) {
