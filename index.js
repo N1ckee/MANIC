@@ -17,8 +17,6 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
 });
 
 
-
-
   var marker;
 
   function geocode() {
