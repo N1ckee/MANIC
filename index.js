@@ -56,7 +56,7 @@ function getLocation() {
 }
 
 function success(position) {
-  map.setView([position.coords.latitude,position.coords.longitude])
+  map.setView([position.coords.latitude,position.coords.longitude], 14)
   document.getElementById("lat").innerText = "Latitud: " + position.coords.latitude;
   document.getElementById("lng").innerText = "Longitud:" + position.coords.longitude; 
 }
