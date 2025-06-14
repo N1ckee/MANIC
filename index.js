@@ -28,12 +28,7 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
           var lng = data[0].lon;
 
           document.getElementById("lat").innerText = "Latitud: " + lat;
-<<<<<<< HEAD
           document.getElementById("lng").innerText = "Longitud:" + lng; 
-=======
-          document.getElementById("lng").innerText = "Longitud:" + lon; 
-
->>>>>>> a43542a6faa9e55b0de50eb59e47bb41fb450aa3
           // Move map to result
           map.setView([lat, lng], 14);
 
@@ -89,7 +84,7 @@ function calculateTiltAngle(latitude, season = "average") {
     default:
       tilt = latitude;
   }
-  return Math.max(0, Math.min(tilt, 90)); // Clamp between 0 and 90 degrees
+  return Math.max(0, Math.abs(Math.min(tilt, 90))); // Clamp between 0 and 90 degrees
 }
 
 // Function that runs when the user clicks the "Calculate" button
