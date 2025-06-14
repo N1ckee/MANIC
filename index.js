@@ -99,6 +99,7 @@ function runCalculation() {
   const latitude = parseFloat(latMatch[0]);
   const season = document.getElementById("season").value;
   const tilt = calculateTiltAngle(latitude, season);
+  const direction = getPanelDirection(latitude);
 
   document.getElementById("tilt-angle").innerText = `Recommended tilt angle for ${season}: ${tilt.toFixed(1)}°`;
 };
