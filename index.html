@@ -11,16 +11,27 @@
   </head>
   <body>
     <div class="container">
-      <div class="calcbox">
-        <h1>Solarcalculator</h1>
-        <t>The application to calculate solar profibility</t>
-        <br>
-        <input></input>
-        <button>Calculate</button>
-        <br>
-        <t id="lat"></t>
-        <br>
-        <t id="lng"></t>
+      <div>
+        <div class="calcbox">
+          <h1>Solarcalculator</h1>
+          <t>The application to calculate solar profibility</t>
+          <br>
+          <input></input>
+          <button>Calculate</button>
+          <br>
+          <t id="lat">Latitud:</t>
+          <br>
+          <t id="lng">Longitud:</t>
+        </div>
+        <div class="infobox">
+          <div class="infoselector">
+            <div class="infotab" style="color:purple"><t>All</t></div>
+            <div class="infotab" style="color:rgb(51, 128, 0)"><t>Spring</t></div>
+            <div class="infotab" style="color:rgb(119, 128, 0)"><t>Summer</t></div>
+            <div class="infotab" style="color:rgb(128, 73, 0)"><t>Fall</t></div>
+            <div class="infotab" style="color:rgb(0, 128, 111)"><t>Winter</t></div>
+          </div>
+        </div>
       </div>
       <div class="mapbox">
         <div id="map" style="height: 500px;"></div>
