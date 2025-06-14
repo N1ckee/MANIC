@@ -97,6 +97,11 @@ function runCalculation() {
   const latitude = parseFloat(latMatch[0]);
   const season = document.getElementById("season").value;
   const tilt = calculateTiltAngle(latitude, season);
+  const direction = getPanelDirection(latitude);
 
-  document.getElementById("tilt-angle").innerText = `Recommended tilt angle for ${season}: ${tilt.toFixed(1)}°`;
+  document.getElementById("tilt-angle").innerText = `Recommended tilt angle for ${season}: ${tilt.toFixed(1)}°\nPanel should face: ${direction}`;
 };
+
+function getPanelDirection(latitude) {
+  return latitude >= 0 ? "South" : "North";
+}
