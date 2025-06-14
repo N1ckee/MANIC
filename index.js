@@ -49,6 +49,16 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
   }
 
 
+// Press enter to search
+const inputaddress = document.getElementById("address");
+
+    inputaddress.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault(); // Prevent form submission if needed
+        document.getElementById("search").click(); // Simulate button click
+      }
+    });
+
 // Gets geodata from user and updates the map with it
 function getLocation() {
   if (navigator.geolocation) {
