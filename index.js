@@ -25,16 +25,18 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
       .then(data => {
         if (data.length > 0) {
           var lat = data[0].lat;
-          var lon = data[0].lon;
+          var lng = data[0].lon;
 
+          document.getElementById("lat").innerText = "Latitud: " + lat;
+          document.getElementById("lng").innerText = "Longitud:" + lng; 
           // Move map to result
-          map.setView([lat, lon], 13);
+          map.setView([lat, lng], 14);
 
           // Place or move marker
           if (marker) {
-            marker.setLatLng([lat, lon]);
+            marker.setLatLng([lat, lng]);
           } else {
-            marker = L.marker([lat, lon]).addTo(map);
+            marker = L.marker([lat, lng]).addTo(map);
           }
         } else {
           alert("Address not found");
