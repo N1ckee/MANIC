@@ -107,7 +107,6 @@ function runCalculation() {
 
   const latitude = parseFloat(latMatch[0]);
   const season = document.getElementById("season").value;
-<<<<<<< HEAD
 
   const area = parseFloat(document.getElementById("panelArea").value);
   const efficiency = parseFloat(document.getElementById("panelEfficiency").value);
@@ -118,9 +117,6 @@ function runCalculation() {
   }
 
   const tilt = calculateTiltAngle(latitude, season);
-=======
-  const tilt = calculateTiltAngle(Math.abs(latitude), season);
->>>>>>> b4ddd3734b35b7acb08c3489b738b9a6eb8395f6
   const direction = getPanelDirection(latitude);
 
   document.getElementById("tilt-angle").innerText = `Recommended tilt angle for ${season}: ${tilt.toFixed(1)}°\nPanel should face: ${direction}`;

@@ -28,7 +28,7 @@
 }
 
 .container {
-    display:  inline-flex;
+    display: inline-flex;
     width: fit-content;
     align-self: center;
     border: 2px dashed black;
