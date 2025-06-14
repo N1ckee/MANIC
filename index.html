@@ -11,6 +11,7 @@
   </head>
   <body>
     <div class="container">
+<<<<<<< Updated upstream
       <div>
         <div class="calcbox">
           <h1>Solarcalculator</h1>
@@ -32,6 +33,34 @@
             <div class="infotab" style="color:rgb(0, 128, 111)"><t>Winter</t></div>
           </div>
         </div>
+=======
+      <div class="calcbox">
+        <h1>Solarcalculator</h1>
+        <t>The application to calculate solar profibility</t>
+
+        <br>
+        <label for="season">Select Season:</label>
+        <select id="season">
+          <option value="average">Year-Round</option>
+          <option value="summer">Summer</option>
+          <option value="winter">Winter</option>
+          <option value="spring">Spring</option>
+          <option value="authumn">Authumn</option>
+
+        </select>
+
+        <br><br>
+        <button onclick="runCalculation()">Calculate Tilt Angle</button>
+        
+        
+        <button>Calculate</button>
+        <br>
+        <t id="lat"></t>
+        <br>
+        <t id="lng"></t>
+        <br>
+        <t id="tilt-angle"></t>
+>>>>>>> Stashed changes
       </div>
       <div class="mapbox">
         <div id="map" style="height: 500px;"></div>
