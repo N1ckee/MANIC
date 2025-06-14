@@ -27,6 +27,9 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
           var lat = data[0].lat;
           var lon = data[0].lon;
 
+          document.getElementById("lat").innerText = "Latitud: " + lat;
+          document.getElementById("lng").innerText = "Longitud:" + lon; 
+
           // Move map to result
           map.setView([lat, lon], 13);
 
