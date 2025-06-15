@@ -51,7 +51,7 @@ function geocode() {
       .catch(error => {
         alert("Geocoding error: " + error);
       });
-  }
+}
 
 // Press enter to search
 const inputaddress = document.getElementById("address");
@@ -123,16 +123,19 @@ function calculateTiltAngle(latitude, season = "average") {
       break;
     case "spring":
       tilt = latitude;
+      break;
     case "fall":
       tilt = latitude;
+      break;
     default:
       tilt = 0.76 * latitude + 3.1
+      break;
   }
   return Math.max(0, Math.min(tilt, 90)); // Clamp between 0 and 90 degrees
 }
 
 // Function that runs when the user clicks the "Calculate" button
-function runCalculation(season = "average") {
+function runCalculation() {
   const latText = document.getElementById("lat").innerText;
   const latMatch = latText.match(/[-+]?[0-9]*\.?[0-9]+/); // Extract number from text
   if (!latMatch) {
@@ -165,62 +168,63 @@ function runCalculation(season = "average") {
 
   // Irradiance data
   
-switch (season.toLowerCase()) {
-  case "winter": {
-    const irradiance = [
-      0.0, 0.0, 0.0, 0.0, 0.0, 0.1,
-      0.2, 0.4, 0.6, 0.7, 0.8, 0.8,
-      0.7, 0.6, 0.5, 0.4, 0.3, 0.2,
-      0.1, 0.0, 0.0, 0.0, 0.0, 0.0
-    ];
-    drawTiltchart(labels, data);
-    drawDailyProductionChart(irradiance);
-    break;
+  switch (season.toLowerCase()) {
+    case "winter": {
+      const irradiance = [
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.1,
+        0.2, 0.4, 0.6, 0.7, 0.8, 0.8,
+        0.7, 0.6, 0.5, 0.4, 0.3, 0.2,
+        0.1, 0.0, 0.0, 0.0, 0.0, 0.0
+      ];
+      drawTiltchart(labels, data);
+      drawDailyProductionChart(irradiance);
+      break;
+    }
+    case "summer": {
+      const irradiance = [
+        0.0, 0.0, 0.0, 0.1, 0.2, 0.4,
+        0.9, 1.3, 1.6, 1.8, 2.0, 2.1,
+        2.1, 2.0, 1.9, 1.7, 1.4, 1.1,
+        0.9, 0.6, 0.4, 0.2, 0.1, 0.0
+      ];
+      drawTiltchart(labels, data);
+      drawDailyProductionChart(irradiance);
+      break;
+    }
+    case "spring": {
+      const irradiance = [
+        0.0, 0.0, 0.0, 0.0, 0.1, 0.2,
+        0.5, 0.8, 1.1, 1.3, 1.4, 1.5,
+        1.6, 1.5, 1.4, 1.2, 1.0, 0.8,
+        0.6, 0.4, 0.2, 0.1, 0.0, 0.0
+      ];
+      drawTiltchart(labels, data);
+      drawDailyProductionChart(irradiance);
+      break;
+    }
+    case "fall": {
+      const irradiance = [
+        0.0, 0.0, 0.0, 0.0, 0.1, 0.2,
+        0.4, 0.7, 1.0, 1.2, 1.3, 1.4,
+        1.3, 1.2, 1.0, 0.8, 0.6, 0.5,
+        0.3, 0.2, 0.1, 0.0, 0.0, 0.0
+      ];
+      drawTiltchart(labels, data);
+      drawDailyProductionChart(irradiance);
+      break;
+    }
+    default: {
+      const irradiance = [
+        0.0, 0.0, 0.0, 0.0, 0.02, 0.08,
+        0.20, 0.40, 0.65, 0.85, 1.00, 1.10,
+        1.15, 1.10, 1.00, 0.85, 0.70, 0.55,
+        0.40, 0.25, 0.12, 0.05, 0.01, 0.0
+      ];
+      drawTiltchart(labels, data);
+      drawDailyProductionChart(irradiance);
+    } 
   }
-  case "summer": {
-    const irradiance = [
-      0.0, 0.0, 0.0, 0.1, 0.2, 0.4,
-      0.9, 1.3, 1.6, 1.8, 2.0, 2.1,
-      2.1, 2.0, 1.9, 1.7, 1.4, 1.1,
-      0.9, 0.6, 0.4, 0.2, 0.1, 0.0
-    ];
-    drawTiltchart(labels, data);
-    drawDailyProductionChart(irradiance);
-    break;
-  }
-  case "spring": {
-    const irradiance = [
-      0.0, 0.0, 0.0, 0.0, 0.1, 0.2,
-      0.5, 0.8, 1.1, 1.3, 1.4, 1.5,
-      1.6, 1.5, 1.4, 1.2, 1.0, 0.8,
-      0.6, 0.4, 0.2, 0.1, 0.0, 0.0
-    ];
-    drawTiltchart(labels, data);
-    drawDailyProductionChart(irradiance);
-    break;
-  }
-  case "fall": {
-    const irradiance = [
-      0.0, 0.0, 0.0, 0.0, 0.1, 0.2,
-      0.4, 0.7, 1.0, 1.2, 1.3, 1.4,
-      1.3, 1.2, 1.0, 0.8, 0.6, 0.5,
-      0.3, 0.2, 0.1, 0.0, 0.0, 0.0
-    ];
-    drawTiltchart(labels, data);
-    drawDailyProductionChart(irradiance);
-    break;
-  }
-  default: {
-    const irradiance = [
-      0.0, 0.0, 0.0, 0.0, 0.02, 0.08,
-      0.20, 0.40, 0.65, 0.85, 1.00, 1.10,
-      1.15, 1.10, 1.00, 0.85, 0.70, 0.55,
-      0.40, 0.25, 0.12, 0.05, 0.01, 0.0
-    ];
-    drawTiltchart(labels, data);
-    drawDailyProductionChart(irradiance);
 }
-};
 
 function getPanelDirection(latitude) {
   return latitude >= 0 ? "South" : "North";
@@ -256,4 +260,4 @@ function displayCO2Savings(kWhPerYear){
 function error() {
   alert("Sorry, no position available.");
 }
-}
+
