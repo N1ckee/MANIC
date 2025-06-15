@@ -134,6 +134,10 @@ function runCalculation() {
   const outputData = simulateOutputByTilt(latitude, area, efficiency);
   const labels = outputData.map(item => item.tilt);
   const data = outputData.map(item => item.output);
+
+  const maxOutput = Math.max(...data.map(Number));
+  displayCO2Savings(maxOutput);
+
   drawTiltchart(labels, data);
 
 };
@@ -183,8 +187,19 @@ function simulateOutputByTilt(latitude, area, efficiency) {
     const efficiencyFactor = Math.cos((Math.PI / 180) * (tilt - optimalTilt));
     const normalized = Math.max(0, efficiencyFactor);
     const output = panelPowerKW * averageSunHoursPerYear * normalized;
-    results.push({ tilt, output: output.toFixed(0) });
+    results.push({ tilt, output: output });
   }
 
   return results;
+}
+
+
+function displayCO2Savings(kWhPerYear){
+  const co2PerKWh = 0.5; // kg CO₂ saved per kWh
+  const co2Saved = kWhPerYear * co2PerKWh;
+
+  const co2Text = `This setup could reduce approximately <strong>${co2Saved.toFixed(0)} kg</strong> of CO₂ per year.`;
+
+  document.getElementById("co2-saving").innerHTML = co2Text;
+
 }
