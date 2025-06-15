@@ -22,7 +22,7 @@ body {
     align-items: center;
     align-content: center;
     margin: 0px auto;
-    padding: 0px 2px;
+    padding: 0px 8px;
     border-left: 4px double black;
     border-right: 4px double black;
 }
@@ -40,8 +40,8 @@ body {
     display: flexbox;
     margin: 2px;
     border:  2px solid black;
-    width: 500px;
-    height: 500px;
+    width: fit-content;
+    height: fit-content;
 }
 
 .container {
