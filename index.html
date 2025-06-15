@@ -42,16 +42,16 @@
           <br>
           <button onclick="runCalculation()">Calculate</button>
           <select id="season" style="width: 200px;">
-            <option>All</option>
+            <option>Year-round</option>
             <option>Spring</option>
             <option>Summer</option>
             <option>Fall</option>
             <option>Winter</option>
           </select>
           <p>
-            Panel area (m²): <input type="number" id="panelArea" min="0" step="0.1" />
+            Panel area (m²): <input type="number" id="panelArea" min="0" step="0.1" value="5"/>
             <br>
-            Panel efficiency (%): <input type="number" id="panelEfficiency" min="0" step="1" />
+            Panel efficiency (%): <input type="number" id="panelEfficiency" min="0" step="1" value="20"/>
           </p>
           <p id="tilt-angle">Recommended tilt angle for All:<br>Panel should face:</p>
           <p id="co2-saving" style="margin-top: 15px;"></p>
