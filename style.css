@@ -1,3 +1,20 @@
+body {
+    background-color: white;
+    color: black;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Dark mode */
+  body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+
+ #toggle-theme {
+    margin-left: auto;
+    display: flex;
+ }
+
 .bodycontainer {
     display: flexbox;
     width: fit-content;
@@ -55,11 +72,14 @@
 }
 
 .solarhead {
+    display: flex;
+    align-items: center;
     padding: 4px 10px;
 }
 
 .solarheadtext {
     font-family: 'Times New Roman', Times, serif;
-    font-style: italic; 
+    font-style: italic;
+    display: flex; 
     line-height: 1px;
 }

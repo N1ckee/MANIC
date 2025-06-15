@@ -15,31 +15,45 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
     }
     
 });
-  var marker;
 
-  function geocode() {
-    var address = document.getElementById('address').value;
+var marker;
 
-    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
-      .then(response => response.json())
-      .then(data => {
-        if (data.length > 0) {
-          var lat = data[0].lat;
-          var lng = data[0].lon;
+var marker;
 
-          document.getElementById("lat").innerText = "Latitud: \n" + lat;
-          document.getElementById("lng").innerText = "Longitud: \n" + lng; 
+function geocode() {
+  var address = document.getElementById('address').value;
 
-          // Move map to result
-          map.setView([lat, lng], 14);
+  fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
+    .then(response => response.json())
+    .then(data => {
+      if (data.length > 0) {
+        var lat = data[0].lat;
+        var lng = data[0].lon;
+  
 
-          // Place or move marker
-          if (marker) {
-            marker.setLatLng([lat, lng]);
-          } else {
+        document.getElementById("lat").innerText = "Latitud: \n" + lat;
+        document.getElementById("lng").innerText = "Longitud: \n" + lng; 
+
+        // Move map to result
+        map.setView([lat, lng], 14);
+      
+
+        // Place or move marker
+        if (marker) {
+          marker.setLatLng([lat, lng]);
+        } 
+        else {
+        // Place or move marker
+        if (marker) {
+          marker.setLatLng([lat, lng]);
+        } 
+        else {
             marker = L.marker([lat, lng]).addTo(map);
-          }
-        } else {
+        }
+        }
+        
+        }
+        else {
           alert("Address not found");
         }
       })
@@ -49,15 +63,46 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
   }
 
 
+// Dark/light Mode
+const lightTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors'
+});
+
+const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap contributors, © CartoDB'
+});
+
+lightTiles.addTo(map);
+
+const toggleButton = document.getElementById('toggle-theme');
+
+toggleButton.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+  
+  if (document.body.classList.contains('dark-mode')) {
+    map.removeLayer(lightTiles);
+    darkTiles.addTo(map);
+  } else {
+    map.removeLayer(darkTiles);
+    lightTiles.addTo(map);
+  }
+});
+
 // Press enter to search
 const inputaddress = document.getElementById("address");
 
-    inputaddress.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault(); // Prevent form submission if needed
-        document.getElementById("search").click(); // Simulate button click
-      }
-    });
+inputaddress.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // Prevent form submission if needed
+    document.getElementById("search").click(); // Simulate button click
+  }
+});
+inputaddress.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // Prevent form submission if needed
+    document.getElementById("search").click(); // Simulate button click
+  }
+});
 
 // Gets geodata from user and updates the map with it
 function getLocation() {
@@ -80,10 +125,6 @@ function success(position) {
   {
     marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
   }
-}
-
-function error() {
-  alert("Sorry, no position available.");
 }
 
 // Function to calculate tilt angle based on latitude and season
@@ -139,38 +180,9 @@ function runCalculation() {
   displayCO2Savings(maxOutput);
 
   drawTiltchart(labels, data);
-
+  drawDailyProductionChart(irradiance);
+  drawDailyProductionChart(irradiance);
 };
-
-function drawTiltchart(labels, data) {
-  const ctx = document.getElementById('tiltChart').getContext('2d');
-
-  if (window.tiltChartInstance) {
-    window.tiltChartInstance.destroy(); // Reset previous chart
-  }
-
-  window.tiltChartInstance = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Estimated Output (kWh)',
-        data: data,
-        borderColor: 'orange',
-        fill: false,
-        tension: 0.3
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        x: { title: { display: true, text: 'Tilt Angle (°)' } },
-        y: { title: { display: true, text: 'Annual Output (kWh/year)' } }
-      }
-    }
-  });
-};
-
 
 function getPanelDirection(latitude) {
   return latitude >= 0 ? "South" : "North";
