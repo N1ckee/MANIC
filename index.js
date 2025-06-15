@@ -128,10 +128,10 @@ function calculateTiltAngle(latitude, season = "average") {
       tilt = latitude - 15;
       break;
     case "spring":
-      tilt = latitude;
+      tilt = 0.76 * latitude + 3.1
       break;
     case "fall":
-      tilt = latitude;
+      tilt = 0.76 * latitude + 3.1
       break;
     default:
       tilt = 0.76 * latitude + 3.1
