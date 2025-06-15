@@ -15,31 +15,36 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
     }
     
 });
-  var marker;
 
-  function geocode() {
-    var address = document.getElementById('address').value;
+var marker;
 
-    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
-      .then(response => response.json())
-      .then(data => {
-        if (data.length > 0) {
-          var lat = data[0].lat;
-          var lng = data[0].lon;
+function geocode() {
+  var address = document.getElementById('address').value;
 
-          document.getElementById("lat").innerText = "Latitud: \n" + lat;
-          document.getElementById("lng").innerText = "Longitud: \n" + lng; 
+  fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
+    .then(response => response.json())
+    .then(data => {
+      if (data.length > 0) {
+        var lat = data[0].lat;
+        var lng = data[0].lon;
+  
+        document.getElementById("lat").innerText = "Latitud: \n" + lat;
+        document.getElementById("lng").innerText = "Longitud: \n" + lng; 
 
-          // Move map to result
-          map.setView([lat, lng], 14);
-
-          // Place or move marker
-          if (marker) {
-            marker.setLatLng([lat, lng]);
-          } else {
+        // Move map to result
+        map.setView([lat, lng], 14);
+      
+        // Place or move marker
+        if (marker) {
+          marker.setLatLng([lat, lng]);
+        } 
+        else {
             marker = L.marker([lat, lng]).addTo(map);
-          }
-        } else {
+        }
+        }
+        
+        
+        else {
           alert("Address not found");
         }
       })
@@ -48,6 +53,38 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
       });
   }
 
+// Press enter to search
+const inputaddress = document.getElementById("address");
+
+inputaddress.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // Prevent form submission if needed
+    document.getElementById("search").click(); // Simulate button click
+  }
+});
+
+// Gets geodata from user and updates the map with it
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(success, error);
+  } else {
+   // x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function success(position) {
+
+  map.setView([position.coords.latitude,position.coords.longitude], 14)
+  document.getElementById("lat").innerText = "Latitud: \n" + position.coords.latitude;
+  document.getElementById("lng").innerText = "Longitud: \n" + position.coords.longitude; 
+  if (marker) {
+    marker.setLatLng([position.coords.latitude, position.coords.longitude]);
+  } 
+  else 
+  {
+    marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+  }
+}
 
 // Dark/light Mode
 const lightTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -74,43 +111,6 @@ toggleButton.addEventListener('click', () => {
   }
 });
 
-// Press enter to search
-const inputaddress = document.getElementById("address");
-
-    inputaddress.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault(); // Prevent form submission if needed
-        document.getElementById("search").click(); // Simulate button click
-      }
-    });
-
-// Gets geodata from user and updates the map with it
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(success, error);
-  } else {
-   // x.innerHTML = "Geolocation is not supported by this browser.";
-  }
-}
-
-function success(position) {
-
-  map.setView([position.coords.latitude,position.coords.longitude], 14)
-  document.getElementById("lat").innerText = "Latitud: \n" + position.coords.latitude;
-  document.getElementById("lng").innerText = "Longitud: \n" + position.coords.longitude; 
-  if (marker) {
-    marker.setLatLng([position.coords.latitude, position.coords.longitude]);
-  } 
-  else 
-  {
-    marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-  }
-}
-
-function error() {
-  alert("Sorry, no position available.");
-}
-
 // Function to calculate tilt angle based on latitude and season
 function calculateTiltAngle(latitude, season = "average") {
   let tilt;
@@ -132,7 +132,7 @@ function calculateTiltAngle(latitude, season = "average") {
 }
 
 // Function that runs when the user clicks the "Calculate" button
-function runCalculation() {
+function runCalculation(season = "average") {
   const latText = document.getElementById("lat").innerText;
   const latMatch = latText.match(/[-+]?[0-9]*\.?[0-9]+/); // Extract number from text
   if (!latMatch) {
@@ -159,39 +159,68 @@ function runCalculation() {
   const outputData = simulateOutputByTilt(latitude, area, efficiency);
   const labels = outputData.map(item => item.tilt);
   const data = outputData.map(item => item.output);
-  drawTiltchart(labels, data);
 
-};
+  const maxOutput = Math.max(...data.map(Number));
+  displayCO2Savings(maxOutput);
 
-function drawTiltchart(labels, data) {
-  const ctx = document.getElementById('tiltChart').getContext('2d');
-
-  if (window.tiltChartInstance) {
-    window.tiltChartInstance.destroy(); // Reset previous chart
+  // Irradiance data
+  
+switch (season.toLowerCase()) {
+  case "winter": {
+    const irradiance = [
+      0.0, 0.0, 0.0, 0.0, 0.0, 0.1,
+      0.2, 0.4, 0.6, 0.7, 0.8, 0.8,
+      0.7, 0.6, 0.5, 0.4, 0.3, 0.2,
+      0.1, 0.0, 0.0, 0.0, 0.0, 0.0
+    ];
+    drawTiltchart(labels, data);
+    drawDailyProductionChart(irradiance);
+    break;
   }
-
-  window.tiltChartInstance = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Estimated Output (kWh)',
-        data: data,
-        borderColor: 'orange',
-        fill: false,
-        tension: 0.3
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        x: { title: { display: true, text: 'Tilt Angle (°)' } },
-        y: { title: { display: true, text: 'Annual Output (kWh/year)' } }
-      }
-    }
-  });
+  case "summer": {
+    const irradiance = [
+      0.0, 0.0, 0.0, 0.1, 0.2, 0.4,
+      0.9, 1.3, 1.6, 1.8, 2.0, 2.1,
+      2.1, 2.0, 1.9, 1.7, 1.4, 1.1,
+      0.9, 0.6, 0.4, 0.2, 0.1, 0.0
+    ];
+    drawTiltchart(labels, data);
+    drawDailyProductionChart(irradiance);
+    break;
+  }
+  case "spring": {
+    const irradiance = [
+      0.0, 0.0, 0.0, 0.0, 0.1, 0.2,
+      0.5, 0.8, 1.1, 1.3, 1.4, 1.5,
+      1.6, 1.5, 1.4, 1.2, 1.0, 0.8,
+      0.6, 0.4, 0.2, 0.1, 0.0, 0.0
+    ];
+    drawTiltchart(labels, data);
+    drawDailyProductionChart(irradiance);
+    break;
+  }
+  case "fall": {
+    const irradiance = [
+      0.0, 0.0, 0.0, 0.0, 0.1, 0.2,
+      0.4, 0.7, 1.0, 1.2, 1.3, 1.4,
+      1.3, 1.2, 1.0, 0.8, 0.6, 0.5,
+      0.3, 0.2, 0.1, 0.0, 0.0, 0.0
+    ];
+    drawTiltchart(labels, data);
+    drawDailyProductionChart(irradiance);
+    break;
+  }
+  default: {
+    const irradiance = [
+      0.0, 0.0, 0.0, 0.0, 0.02, 0.08,
+      0.20, 0.40, 0.65, 0.85, 1.00, 1.10,
+      1.15, 1.10, 1.00, 0.85, 0.70, 0.55,
+      0.40, 0.25, 0.12, 0.05, 0.01, 0.0
+    ];
+    drawTiltchart(labels, data);
+    drawDailyProductionChart(irradiance);
+}
 };
-
 
 function getPanelDirection(latitude) {
   return latitude >= 0 ? "South" : "North";
@@ -208,8 +237,23 @@ function simulateOutputByTilt(latitude, area, efficiency) {
     const efficiencyFactor = Math.cos((Math.PI / 180) * (tilt - optimalTilt));
     const normalized = Math.max(0, efficiencyFactor);
     const output = panelPowerKW * averageSunHoursPerYear * normalized;
-    results.push({ tilt, output: output.toFixed(0) });
+    results.push({ tilt, output: output });
   }
 
   return results;
+}
+
+
+function displayCO2Savings(kWhPerYear){
+  const co2PerKWh = 0.5; // kg CO₂ saved per kWh
+  const co2Saved = kWhPerYear * co2PerKWh;
+
+  const co2Text = `This setup could reduce approximately <strong>${co2Saved.toFixed(0)} kg</strong> of CO₂ per year.`;
+
+  document.getElementById("co2-saving").innerHTML = co2Text;
+
+}
+function error() {
+  alert("Sorry, no position available.");
+}
 }
