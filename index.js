@@ -18,8 +18,6 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
 
 var marker;
 
-var marker;
-
 function geocode() {
   var address = document.getElementById('address').value;
 
@@ -43,16 +41,11 @@ function geocode() {
           marker.setLatLng([lat, lng]);
         } 
         else {
-        // Place or move marker
-        if (marker) {
-          marker.setLatLng([lat, lng]);
-        } 
-        else {
             marker = L.marker([lat, lng]).addTo(map);
         }
         }
         
-        }
+        
         else {
           alert("Address not found");
         }
@@ -62,41 +55,9 @@ function geocode() {
       });
   }
 
-
-// Dark/light Mode
-const lightTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap contributors'
-});
-
-const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  attribution: '© OpenStreetMap contributors, © CartoDB'
-});
-
-lightTiles.addTo(map);
-
-const toggleButton = document.getElementById('toggle-theme');
-
-toggleButton.addEventListener('click', () => {
-  document.body.classList.toggle('dark-mode');
-  
-  if (document.body.classList.contains('dark-mode')) {
-    map.removeLayer(lightTiles);
-    darkTiles.addTo(map);
-  } else {
-    map.removeLayer(darkTiles);
-    lightTiles.addTo(map);
-  }
-});
-
 // Press enter to search
 const inputaddress = document.getElementById("address");
 
-inputaddress.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault(); // Prevent form submission if needed
-    document.getElementById("search").click(); // Simulate button click
-  }
-});
 inputaddress.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     event.preventDefault(); // Prevent form submission if needed
@@ -126,6 +87,31 @@ function success(position) {
     marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
   }
 }
+
+// Dark/light Mode
+const lightTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors'
+});
+
+const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap contributors, © CartoDB'
+});
+
+lightTiles.addTo(map);
+
+const toggleButton = document.getElementById('toggle-theme');
+
+toggleButton.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+  
+  if (document.body.classList.contains('dark-mode')) {
+    map.removeLayer(lightTiles);
+    darkTiles.addTo(map);
+  } else {
+    map.removeLayer(darkTiles);
+    lightTiles.addTo(map);
+  }
+});
 
 // Function to calculate tilt angle based on latitude and season
 function calculateTiltAngle(latitude, season = "average") {
@@ -178,9 +164,15 @@ function runCalculation() {
 
   const maxOutput = Math.max(...data.map(Number));
   displayCO2Savings(maxOutput);
+  const irradiance = [
+  0.2, 0.15, 0.1, 0.1, 0.1, 0.2,
+  0.4, 0.6, 0.7, 0.8, 0.9, 1.0,
+  1.2, 1.1, 1.0, 0.9, 0.8, 0.7,
+  0.6, 0.5, 0.4, 0.3, 0.2, 0.1
+];
+
 
   drawTiltchart(labels, data);
-  drawDailyProductionChart(irradiance);
   drawDailyProductionChart(irradiance);
 };
 
@@ -214,4 +206,7 @@ function displayCO2Savings(kWhPerYear){
 
   document.getElementById("co2-saving").innerHTML = co2Text;
 
+}
+function error() {
+  alert("Sorry, no position available.");
 }
