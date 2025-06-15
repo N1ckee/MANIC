@@ -27,8 +27,23 @@ function drawTiltchart(labels, data) {
   });
 };
 
-function drawDailyProductionChart(irradiance) {
+function drawDailyProductionChart(avg_ghi) {
   const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+
+  // Distribute GHI across daylight hours (e.g., 6 AM to 6 PM) using a bell-like shape
+  const hourlyProfile = hours.map((_, hour) => {
+    const daylightStart = 6;
+    const daylightEnd = 18;
+    const daylightHours = daylightEnd - daylightStart;
+
+    if (hour < daylightStart || hour >= daylightEnd) return 0;
+
+    // Normalize hour to a 0–π range to simulate sun elevation curve
+    const x = Math.PI * (hour - daylightStart) / daylightHours;
+    const weight = Math.sin(x); // 0 at 6 AM/6 PM, peak at noon
+
+    return (avg_ghi * weight) / daylightHours;
+  });
 
   const ctx = document.getElementById('daychart').getContext('2d');
 
@@ -41,15 +56,26 @@ function drawDailyProductionChart(irradiance) {
     data: {
       labels: hours,
       datasets: [{
-        label: 'Energy Production (kWh)',
-        data: irradiance,
+        label: 'Simulated Hourly Production (kWh/m²)',
+        data: hourlyProfile.map(v => parseFloat(v.toFixed(2))),
         backgroundColor: 'rgba(54, 162, 235, 0.6)',
         borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1
+        borderWidth: 1,
+        fill: true,
+        tension: 0.4
       }]
     },
     options: {
       responsive: true,
+      plugins: {
+        legend: {
+          display: true
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false
+        }
+      },
       scales: {
         x: {
           title: {
@@ -61,10 +87,10 @@ function drawDailyProductionChart(irradiance) {
           beginAtZero: true,
           title: {
             display: true,
-            text: 'kWh'
+            text: 'kWh/m²'
           }
         }
       }
     }
   });
-};
+}
