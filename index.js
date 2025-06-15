@@ -26,8 +26,12 @@ function geocode() {
     .then(data => {
       if (data.length > 0) {
         var lat = data[0].lat;
-        var lng = data[0].lon;
-  
+        var lng = data[0].lon; 
+        if (data[0].lat == undefined || data[0].lon == undefined) {
+          lat = 57.7072326;
+          lng = 11.9670171;
+        }
+
         document.getElementById("lat").innerText = "Latitud: \n" + lat;
         document.getElementById("lng").innerText = "Longitud: \n" + lng; 
 
@@ -45,7 +49,7 @@ function geocode() {
         
         
         else {
-          alert("Address not found");
+          alert("Address not found" + lat + " " + lng);
         }
       })
       .catch(error => {
