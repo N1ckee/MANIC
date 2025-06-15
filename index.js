@@ -8,6 +8,7 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
     document.getElementById("lat").innerText = "Latitud: \n" + lat;
     document.getElementById("lng").innerText = "Longitud: \n" + lng; 
 
+
     if (marker) {
       marker.setLatLng([lat, lng]);
     } else {
@@ -17,6 +18,7 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
 });
 
 var marker;
+
 
 function geocode() {
   var address = document.getElementById('address').value;
@@ -153,9 +155,7 @@ function runCalculation() {
   const latitude = parseFloat(latMatch[0]);
   const lat = parseFloat(latMatch[0]);
   const lon = parseFloat(lngMatch[0]);
-
   const season = document.getElementById("season").value;
-
   const area = parseFloat(document.getElementById("panelArea").value);
   const efficiency = parseFloat(document.getElementById("panelEfficiency").value);
 
@@ -166,6 +166,7 @@ function runCalculation() {
 
   const tilt = calculateTiltAngle(Math.abs(latitude), season);
   const direction = getPanelDirection(latitude);
+  
 
   document.getElementById("tilt-angle").innerText = `Recommended tilt angle for ${season}: ${tilt.toFixed(1)}°\nPanel should face: ${direction}`;
 
@@ -179,7 +180,7 @@ function runCalculation() {
 
 
   drawTiltchart(labels, data);
-  getIrradiance(lat, lon)
+  getIrradiance(lat, area, efficiency, lon)
     .then(avg_ghi => {
       document.getElementById("ghi-result").textContent =
   `Average daily GHI: ${avg_ghi.toFixed(2)} kWh/m²/day`;
@@ -228,14 +229,14 @@ function error() {
   alert("Sorry, no position available.");
 }
 
-function getIrradiance(lat, lon) {
-  console.log("Sending coords:", lat, lon);
+function getIrradiance(lat, area ,efficiency, lon) {
+  console.log("Sending coords:", lat, lon); // REMOVE LATER
   return fetch('http://127.0.0.1:5000/api/irradiance', {
     method: 'POST', 
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ lat: lat, lon: lon }) 
+    body: JSON.stringify({ area, efficiency, lat, lon }) 
   })
   .then(response => response.json())
   .then(data => {

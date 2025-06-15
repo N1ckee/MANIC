@@ -39,13 +39,20 @@ def get_daily_irradiance(lat, lon):
 @app.route('/api/irradiance', methods=['POST'])
 def irradiance():
     data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid JSON"}), 400
+
+    area = data.get('area')
+    efficiency = data.get('efficiency')
     lat = data.get('lat')
     lon = data.get('lon')
 
-    if lat is None or lon is None:
-        return jsonify({"error": "Missing coordinates"}), 400
+    # Check required parameters
+    if area is None or efficiency is None or lat is None or lon is None:
+        return jsonify({"error": "Missing required parameters (area, efficiency, lat, lon)"}), 400
 
     try:
+        efficiency = float(efficiency)
         avg_ghi = get_daily_irradiance(lat, lon)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
