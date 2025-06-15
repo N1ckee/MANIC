@@ -15,31 +15,56 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
     }
     
 });
-  var marker;
 
-  function geocode() {
-    var address = document.getElementById('address').value;
+var marker;
 
-    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
-      .then(response => response.json())
-      .then(data => {
-        if (data.length > 0) {
-          var lat = data[0].lat;
-          var lng = data[0].lon;
+var marker;
 
-          document.getElementById("lat").innerText = "Latitud: \n" + lat;
-          document.getElementById("lng").innerText = "Longitud: \n" + lng; 
+function geocode() {
+  var address = document.getElementById('address').value;
+function geocode() {
+  var address = document.getElementById('address').value;
 
-          // Move map to result
-          map.setView([lat, lng], 14);
+  fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
+    .then(response => response.json())
+    .then(data => {
+      if (data.length > 0) {
+        var lat = data[0].lat;
+        var lng = data[0].lon;
+  fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
+    .then(response => response.json())
+    .then(data => {
+      if (data.length > 0) {
+        var lat = data[0].lat;
+        var lng = data[0].lon;
 
-          // Place or move marker
-          if (marker) {
-            marker.setLatLng([lat, lng]);
-          } else {
+        document.getElementById("lat").innerText = "Latitud: \n" + lat;
+        document.getElementById("lng").innerText = "Longitud: \n" + lng; 
+        document.getElementById("lat").innerText = "Latitud: \n" + lat;
+        document.getElementById("lng").innerText = "Longitud: \n" + lng; 
+
+        // Move map to result
+        map.setView([lat, lng], 14);
+        // Move map to result
+        map.setView([lat, lng], 14);
+
+        // Place or move marker
+        if (marker) {
+          marker.setLatLng([lat, lng]);
+        } 
+        else {
+        // Place or move marker
+        if (marker) {
+          marker.setLatLng([lat, lng]);
+        } 
+        else {
             marker = L.marker([lat, lng]).addTo(map);
-          }
-        } else {
+        }
+        }
+        else {
+        }
+        }
+        else {
           alert("Address not found");
         }
       })
@@ -77,12 +102,18 @@ toggleButton.addEventListener('click', () => {
 // Press enter to search
 const inputaddress = document.getElementById("address");
 
-    inputaddress.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault(); // Prevent form submission if needed
-        document.getElementById("search").click(); // Simulate button click
-      }
-    });
+inputaddress.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // Prevent form submission if needed
+    document.getElementById("search").click(); // Simulate button click
+  }
+});
+inputaddress.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // Prevent form submission if needed
+    document.getElementById("search").click(); // Simulate button click
+  }
+});
 
 // Gets geodata from user and updates the map with it
 function getLocation() {
@@ -105,10 +136,6 @@ function success(position) {
   {
     marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
   }
-}
-
-function error() {
-  alert("Sorry, no position available.");
 }
 
 // Function to calculate tilt angle based on latitude and season
@@ -159,39 +186,26 @@ function runCalculation() {
   const outputData = simulateOutputByTilt(latitude, area, efficiency);
   const labels = outputData.map(item => item.tilt);
   const data = outputData.map(item => item.output);
+  const irradiance = [
+  0.2, 0.15, 0.1, 0.1, 0.1, 0.2,
+  0.4, 0.6, 0.7, 0.8, 0.9, 1.0,
+  1.2, 1.1, 1.0, 0.9, 0.8, 0.7,
+  0.6, 0.5, 0.4, 0.3, 0.2, 0.1
+];
+
+
+  const irradiance = [
+  0.2, 0.15, 0.1, 0.1, 0.1, 0.2,
+  0.4, 0.6, 0.7, 0.8, 0.9, 1.0,
+  1.2, 1.1, 1.0, 0.9, 0.8, 0.7,
+  0.6, 0.5, 0.4, 0.3, 0.2, 0.1
+];
+
+
   drawTiltchart(labels, data);
-
+  drawDailyProductionChart(irradiance);
+  drawDailyProductionChart(irradiance);
 };
-
-function drawTiltchart(labels, data) {
-  const ctx = document.getElementById('tiltChart').getContext('2d');
-
-  if (window.tiltChartInstance) {
-    window.tiltChartInstance.destroy(); // Reset previous chart
-  }
-
-  window.tiltChartInstance = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Estimated Output (kWh)',
-        data: data,
-        borderColor: 'orange',
-        fill: false,
-        tension: 0.3
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        x: { title: { display: true, text: 'Tilt Angle (°)' } },
-        y: { title: { display: true, text: 'Annual Output (kWh/year)' } }
-      }
-    }
-  });
-};
-
 
 function getPanelDirection(latitude) {
   return latitude >= 0 ? "South" : "North";
@@ -212,4 +226,11 @@ function simulateOutputByTilt(latitude, area, efficiency) {
   }
 
   return results;
+}
+
+function error() {
+  alert("Sorry, no position available.");
+}
+function error() {
+  alert("Sorry, no position available.");
 }
