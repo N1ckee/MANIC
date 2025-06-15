@@ -187,8 +187,8 @@ function runCalculation() {
     })
     
     .catch(err => {
-      console.error("Error fetching irradiance:", err);
-      alert("Failed to fetch irradiance data.");
+      // If not installed;
+      document.getElementById("ghi-result").textContent = "Average daily GHI: Not connected to the server";
     });
 };
 
