@@ -11,18 +11,18 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   </head>
   <body>
-    <div class="bodycontainer">
-      <header class="solarhead">
+    <div class="bodycontainer bordered">
+      <header class="solarhead ">
         <span>
           <h1 class="solarheadtext">Solarcalculator</h1>
           <h2 class="solarheadtext">------ ------ ------ ----- ---- --</h2>
         </span>
         <button id="toggle-theme">Toggle Dark/Light Mode</button>
       </header>
-      <div class="container">
+      <div class="container bordered">
         <div>
           <!--Search and map functions -->
-          <div class="calcbox">
+          <div class="calcbox bordered">
             <t>The application to calculate solar profibility</t>
             <br>
             <input type="text" id="address" placeholder="Enter an address" />
@@ -37,7 +37,7 @@
             </table>
           </div>
         <!--Provides calculations based on where you are-->
-        <div class="infobox">
+        <div class="infobox bordered">
           <t>Optimal solarpanel angle</t>
           <br>
           <button onclick="runCalculation()">Calculate</button>
@@ -60,7 +60,7 @@
           
         </div>
       </div>
-        <div class="mapbox">
+        <div class="mapbox bordered">
           <div id="map" style="height: 750px; width: 475px;"></div>
         </div>
       </div>

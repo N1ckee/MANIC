@@ -15,6 +15,10 @@ body {
     display: flex;
  }
 
+.dark-mode .bordered {
+    border-color: #666 !important;
+  }
+
 .bodycontainer {
     display: flexbox;
     width: fit-content;
